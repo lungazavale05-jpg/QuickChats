@@ -13,4 +13,4 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Compile Java Files
-      run: javac chatapp/*.java
+      run: javac -d . *.java
