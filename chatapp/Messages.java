@@ -1,7 +1,6 @@
 package chatapp;
 
 import java.util.Scanner;
-import java.util.Random;
 
 public class Messages {
     
@@ -14,10 +13,9 @@ public class Messages {
         app.part();
     }
 
-    
     private static int readInt(String prompt) {
         while (true) {
-            System.out.println(prompt);
+            System.out.print(prompt);
             String line = scan.nextLine().trim();
             try {
                 return Integer.parseInt(line);
@@ -27,14 +25,12 @@ public class Messages {
         }
     }
 
-
     public static boolean checkMessageLength(String message) {
         return message.length() <= 250;
     }
 
-    
     public static String generateMessageID() {
-        Random ran = new Random();
+        java.util.Random ran = new java.util.Random();
         StringBuilder id = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             id.append(ran.nextInt(10));
@@ -45,11 +41,9 @@ public class Messages {
     public static String generateMessageHash(String messageID, int messageNumber, String messageText) {
         String firstTwoID = messageID.substring(0, 2);
         String trimmed = messageText.trim();
-        
         if (trimmed.isEmpty()) {
             return firstTwoID + ":" + messageNumber + ":";
         }
-        
         String[] words = trimmed.split("\\s+");
         String combinedWords = (words[0] + words[words.length - 1]).toUpperCase();
         return firstTwoID + ":" + messageNumber + ":" + combinedWords;
@@ -61,7 +55,9 @@ public class Messages {
             System.out.println("\nWelcome to QuickChat");
             System.out.println("1) Send Messages");
             System.out.println("2) Show recently sent messages");
-            System.out.println("3) Quit");
+            System.out.println("3) Show all stored messages (Part 3)");
+            System.out.println("4) Find longest stored message (Part 3)");
+            System.out.println("5) Quit");
 
             option = readInt("Choose an option: ");
 
@@ -70,11 +66,15 @@ public class Messages {
             } else if (option == 2) {
                 System.out.println("Coming soon");
             } else if (option == 3) {
+                Array.displayStoredMessages();
+            } else if (option == 4) {
+                Array.longestStoredMessage();
+            } else if (option == 5) {
                 System.out.println("Thanks for using QuickChat");
             } else {
                 System.out.println("Error!! Invalid input");
             }
-        } while (option != 3);
+        } while (option != 5);
     }
 
     public static void sendMessages() {
@@ -89,7 +89,7 @@ public class Messages {
 
             String recNo;
             while (true) {
-                System.out.println("Enter recipient cell number: ");
+                System.out.print("Enter recipient cell number: ");
                 recNo = scan.nextLine().trim();
                 if (log.checkCellPhoneNumber(recNo)) {
                     break;
@@ -100,7 +100,7 @@ public class Messages {
 
             String messageText;
             while (true) {
-                System.out.println("Enter message: ");
+                System.out.print("Enter message: ");
                 messageText = scan.nextLine();
                 
                 if (!checkMessageLength(messageText)) {
@@ -122,15 +122,18 @@ public class Messages {
                 totalMessagesSent++;
                 String messageID = generateMessageID();
                 String messageHash = generateMessageHash(messageID, totalMessagesSent, messageText);
+                
+                // Connect to Part 3 Array class
+                Array.addSentMessage(messageText, messageID, messageHash);
 
-                System.out.println("Message successfully sent");
+                System.out.println("Message successfully sent.");
                 System.out.println("Message ID: " + messageID);
                 System.out.println("Message Hash: " + messageHash);
                 System.out.println("Recipient: " + recNo);
                 System.out.println("Message: " + messageText);
 
             } else if (choice == 2) {
-                System.out.println("Press 0 to delete the message: ");
+                System.out.print("Press 0 to delete the message: ");
                 String confirm = scan.nextLine().trim();
                 if (confirm.equals("0")) {
                     System.out.println("Message deleted.");
@@ -138,14 +141,18 @@ public class Messages {
                     System.out.println("Message not deleted.");
                 }
             } else if (choice == 3) {
-                System.out.println("Message successfully stored");
+                // Connect to Part 3 Array class
+                String messageID = generateMessageID();
+                String messageHash = generateMessageHash(messageID, totalMessagesSent, messageText);
+                Array.addStoredMessage(messageText, messageID, messageHash);
+                System.out.println("Message successfully stored.");
             } else {
                 System.out.println("Invalid choice.");
             }
         }
 
-        System.out.println("\n====");
+        System.out.println("\n========================================");
         System.out.println("Total messages processed/sent: " + totalMessagesSent);
-        System.out.println("====");
+        System.out.println("========================================");
     }
 }
