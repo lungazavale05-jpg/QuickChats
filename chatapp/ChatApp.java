@@ -1,7 +1,8 @@
 package chatapp;
-public class Chatapp {
-         public static void main (String[]args) {
-                  Messsages app = new Messages();
-                  app.part(part();
-         }
+
+public class ChatApp {
+    public static void main(String[] args) {
+        Messages app = new Messages();
+        app.part();
+    }
 }
